@@ -1,4 +1,14 @@
 services:
+  app:
+    build: .
+    env_file: .env
+    ports:
+      - "8060:8060"
+    depends_on:
+      - mysql
+      - redis
+      - rabbitMQ
+
   mysql:
     container_name: go-cloud-disk-mysql
     image: mysql:latest
@@ -12,23 +22,24 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-  redis:
-    container_name: go-cloud-disk-redis
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    environment:
-      - REDIS_PASSWORD=123456
-      - ALLOW_EMPTY_PASSWORD=no
-    restart: always
-  rabbitMQ:
-    container_name: go-cloud-disk-rabbitMQ
-    image: rabbitmq:3.13-management
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    restart: always
 
+  redis:
+      container_name: go-cloud-disk-redis
+      image: redis:latest
+      ports:
+        - "6379:6379"
+      environment:
+        - REDIS_PASSWORD=123456
+        - ALLOW_EMPTY_PASSWORD=no
+      restart: always
+
+  rabbitMQ:
+      container_name: go-cloud-disk-rabbitMQ
+      image: rabbitmq:3.13-management
+      ports:
+        - "15672:15672"
+        - "5672:5672"
+      environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest
+      restart: always
